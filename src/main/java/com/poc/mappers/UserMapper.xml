@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- put here the mapping location for interface -->
+<mapper namespace="com.poc.dao.UserMapper" >
+
+	<!-- result type is a pojo so put the mapping to pojo -->
+    <insert id="insert" parameterType="com.poc.model.User" >
+        INSERT INTO student_info (
+        <if test="name != null">student_name,</if>
+        <if test="age != null">student_age,</if>
+        <if test="address != null">student_address</if>
+        )
+       	VALUES (
+       	<if test="name != null">#{name},</if>
+		<if test="age != null">#{age},</if>
+		<if test="address != null">#{address}</if>
+		)
+    </insert>
+    
+    <update id="update" parameterType="com.poc.model.User">
+    	UPDATE student_info set
+    	<if test="name != null">student_name = #{name},</if>
+        <if test="age != null">student_age = #{age},</if>
+        <if test="address != null">student_address = #{address}</if>
+        <where>
+        	student_id = #{id}
+        </where>
+    </update>
+    
+    <delete id="delete" parameterType="com.poc.model.User">
+    	DELETE from student_info
+    	<where>
+    	    student_id = #{id}
+    	</where>
+    </delete>
+    
+	<!--you need to specify the resultmap if it is a bean -->
+    <select id="fetch" parameterType="com.poc.model.User" resultType="com.poc.model.User">
+    	select 
+    	student_name as name, 
+    	student_age as age,
+    	student_address as address 
+    	from student_info
+		<if test='age != null'>where  student_age = #{age}</if>
+    </select>
+   
+</mapper>
